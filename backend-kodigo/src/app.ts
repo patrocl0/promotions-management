@@ -8,8 +8,11 @@ import { errorLogger } from "./middlewares/errorLogger";
 import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
-
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://kodigo-fuente.vercel.app"],
+  }),
+);
 app.use(express.json());
 
 app.use(requestLogger);
