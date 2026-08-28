@@ -21,9 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { CreatePromotion } from "@/interface/Promotion";
-import { usePromotion } from "@/hooks/usePromotion";
 import { useProducts } from "@/hooks/useProduct";
 import { useState } from "react";
 
@@ -42,7 +41,7 @@ interface PopupProps {
 }
 
 export const Popup = ({ onCreate }: PopupProps) => {
-  const { products, productsLoading, error } = useProducts();
+  const { products, productsLoading } = useProducts();
   const [open, setOpen] = useState(false);
   const {
     register,
@@ -63,7 +62,6 @@ export const Popup = ({ onCreate }: PopupProps) => {
       endDate: "",
     },
   });
-  //   const onSubmit: SubmitHandler<CreatePromotion> = (data) => console.log(data);
 
   const onSubmit = async (createPromotion: CreatePromotion) => {
     try {

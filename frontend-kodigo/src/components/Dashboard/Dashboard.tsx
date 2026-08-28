@@ -7,7 +7,6 @@ export const Dashboard = () => {
   const {
     promotions,
     loading,
-    error,
     addPromotion,
     deletePromotion,
     updatePromotion,

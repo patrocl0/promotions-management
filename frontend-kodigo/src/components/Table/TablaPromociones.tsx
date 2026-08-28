@@ -233,7 +233,8 @@ export const TablePromociones = ({
                           </DropdownMenuItem>
                         )}{" "}
                         {/* Finalizar */}{" "}
-                        {promotion.status !== "finalizada" && (
+                        {promotion.status == "programada" ||
+                        promotion.status == "activa" ? (
                           <DropdownMenuItem
                             onClick={() =>
                               handleChangeStatus(promotion._id, "finalizada")
@@ -242,6 +243,8 @@ export const TablePromociones = ({
                             {" "}
                             <CheckCircleIcon /> Finalizar{" "}
                           </DropdownMenuItem>
+                        ) : (
+                          <span></span>
                         )}{" "}
                         <DropdownMenuSeparator />
                         {/* Eliminar */}{" "}
