@@ -81,6 +81,7 @@ export const Popup = ({ onCreate }: PopupProps) => {
   const targetType = watch("targetType");
   const discountType = watch("discountType");
   const productId = watch("product");
+  const selectedProduct = products.find((product) => product._id === productId);
 
   return (
     <Dialog
@@ -150,15 +151,19 @@ export const Popup = ({ onCreate }: PopupProps) => {
 
                 <Select
                   value={productId}
-                  onValueChange={(value) =>
+                  onValueChange={(value) => {
+                    if (!value) return;
+
                     setValue("product", value, {
                       shouldValidate: true,
                       shouldDirty: true,
-                    })
-                  }
+                    });
+                  }}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Seleccionar producto" />
+                    <SelectValue placeholder="Seleccionar producto">
+                      {selectedProduct?.name}
+                    </SelectValue>
                   </SelectTrigger>
 
                   <SelectContent>
@@ -233,19 +238,26 @@ export const Popup = ({ onCreate }: PopupProps) => {
               <Input
                 id="discountValue"
                 type="number"
+                min="0"
+                step="any"
                 placeholder={
                   discountType === "percentage" ? "Ej. 10" : "Ej. 5000"
                 }
                 {...register("discountValue", {
                   required: "El valor es obligatorio",
                   valueAsNumber: true,
-                  min: { value: 1, message: "El valor debe ser positivo" },
-                  ...(discountType === "percentage" && {
-                    max: {
-                      value: 100,
-                      message: "El porcentaje no puede superar 100",
-                    },
-                  }),
+
+                  validate: (value) => {
+                    if (value <= 0) {
+                      return "El valor debe ser mayor a 0";
+                    }
+
+                    if (discountType === "percentage" && value > 100) {
+                      return "El porcentaje debe ser menor o igual a 100";
+                    }
+
+                    return true;
+                  },
                 })}
               />
               {errors.discountValue && (

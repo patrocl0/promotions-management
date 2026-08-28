@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -16,16 +15,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Button } from "../ui/button";
+
 import {
   TrashIcon,
   Search,
-  EditIcon,
   CheckCircleIcon,
   PauseIcon,
   PlayIcon,
   MoreHorizontalIcon,
 } from "lucide-react";
+
 import {
   Select,
   SelectContent,
@@ -33,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+
 import type { Promotion, UpdatePromotion } from "@/interface/Promotion";
 import { useState } from "react";
 
@@ -117,7 +119,13 @@ export const TablePromociones = ({
             />
           </div>
 
-          <Select value={status} onValueChange={setStatus}>
+          <Select
+            value={status}
+            onValueChange={(value) => {
+              if (!value) return;
+              setStatus(value);
+            }}
+          >
             <SelectTrigger className="h-10 sm:w-40">
               <SelectValue placeholder="Filtrar estado" />
             </SelectTrigger>
@@ -181,66 +189,74 @@ export const TablePromociones = ({
                 <TableCell>{promotion.status}</TableCell>
 
                 <TableCell className="text-right">
-                  {" "}
-                  <DropdownMenu>
-                    {" "}
-                    <DropdownMenuTrigger
-                      render={
-                        <Button variant="ghost" size="icon" className="size-8">
-                          {" "}
-                          <MoreHorizontalIcon />{" "}
-                          <span className="sr-only"> Abrir acciones </span>{" "}
-                        </Button>
-                      }
-                    />{" "}
-                    <DropdownMenuContent align="end">
+                  {promotion.status !== "finalizada" && (
+                    <DropdownMenu>
                       {" "}
-                      {/* Activar */}{" "}
-                      {promotion.status !== "activa" && (
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleChangeStatus(promotion._id, "activa")
-                          }
-                        >
-                          {" "}
-                          <PlayIcon /> Activar{" "}
-                        </DropdownMenuItem>
-                      )}{" "}
-                      {/* Programar */}{" "}
-                      {promotion.status !== "programada" && (
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleChangeStatus(promotion._id, "programada")
-                          }
-                        >
-                          {" "}
-                          <PauseIcon /> Programar{" "}
-                        </DropdownMenuItem>
-                      )}{" "}
-                      {/* Finalizar */}{" "}
-                      {promotion.status !== "finalizada" && (
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleChangeStatus(promotion._id, "finalizada")
-                          }
-                        >
-                          {" "}
-                          <CheckCircleIcon /> Finalizar{" "}
-                        </DropdownMenuItem>
-                      )}{" "}
-                      <DropdownMenuSeparator />
-                      {/* Eliminar */}{" "}
-                      {promotion.status === "programada" && (
-                        <DropdownMenuItem
-                          variant="destructive"
-                          onClick={() => handleDelete(promotion._id)}
-                        >
-                          <TrashIcon />
-                          Eliminar
-                        </DropdownMenuItem>
-                      )}
-                    </DropdownMenuContent>{" "}
-                  </DropdownMenu>{" "}
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8"
+                          >
+                            {" "}
+                            <MoreHorizontalIcon />{" "}
+                            <span className="sr-only">
+                              {" "}
+                              Abrir acciones{" "}
+                            </span>{" "}
+                          </Button>
+                        }
+                      />{" "}
+                      <DropdownMenuContent align="end">
+                        {" "}
+                        {/* Activar */}{" "}
+                        {promotion.status !== "activa" && (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleChangeStatus(promotion._id, "activa")
+                            }
+                          >
+                            {" "}
+                            <PlayIcon /> Activar{" "}
+                          </DropdownMenuItem>
+                        )}{" "}
+                        {/* Programar */}{" "}
+                        {promotion.status !== "programada" && (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleChangeStatus(promotion._id, "programada")
+                            }
+                          >
+                            {" "}
+                            <PauseIcon /> Programar{" "}
+                          </DropdownMenuItem>
+                        )}{" "}
+                        {/* Finalizar */}{" "}
+                        {promotion.status !== "finalizada" && (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleChangeStatus(promotion._id, "finalizada")
+                            }
+                          >
+                            {" "}
+                            <CheckCircleIcon /> Finalizar{" "}
+                          </DropdownMenuItem>
+                        )}{" "}
+                        <DropdownMenuSeparator />
+                        {/* Eliminar */}{" "}
+                        {promotion.status === "programada" && (
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onClick={() => handleDelete(promotion._id)}
+                          >
+                            <TrashIcon />
+                            Eliminar
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>{" "}
+                    </DropdownMenu>
+                  )}
                 </TableCell>
               </TableRow>
             ))

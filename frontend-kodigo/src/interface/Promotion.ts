@@ -1,3 +1,5 @@
+import type { Product } from "./Product";
+
 export type DiscountType = "percentage" | "fixed";
 export type TargetType = "product" | "category";
 export type PromotionStatus = "programada" | "activa" | "finalizada";
@@ -6,7 +8,7 @@ export interface Promotion {
   _id: string;
   name: string;
   targetType: TargetType;
-  product?: string;
+  product?: Product;
   category?: string;
   discountType: DiscountType;
   discountValue: number;
@@ -26,6 +28,7 @@ export interface CreatePromotion {
   discountValue: number;
   startDate: string;
   endDate: string;
+  status?: PromotionStatus;
 }
 
 export type UpdatePromotion = Partial<CreatePromotion> & {

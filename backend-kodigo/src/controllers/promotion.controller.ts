@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { Promotion } from "../models/Promotion";
 
 export const getPromotions = async (
@@ -43,6 +43,7 @@ export const getPromotionById = async (
 export const createPromotion = async (
   req: Request,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const {
@@ -115,11 +116,7 @@ export const createPromotion = async (
 
     res.status(201).json(populatedPromotion);
   } catch (error) {
-    console.error("Error creating product:", error);
-
-    res.status(500).json({
-      message: "Error al crear el producto",
-    });
+    next(error);
   }
 };
 
