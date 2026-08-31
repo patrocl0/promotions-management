@@ -91,7 +91,7 @@ export const createPromotion = async (
       return;
     }
     // Validar porcentaje
-    if (discountType === "porcentaje" && discountValue > 100) {
+    if (discountType === "percentage" && discountValue > 100) {
       res
         .status(400)
         .json({ message: "El porcentaje no puede ser mayor a 100" });
