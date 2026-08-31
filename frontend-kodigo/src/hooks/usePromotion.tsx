@@ -41,7 +41,7 @@ export const usePromotion = () => {
 
       const newPromotion = await createPromotion(data);
 
-      setPromotions((current) => [...current, newPromotion]);
+      setPromotions((current) => [newPromotion, ...current]);
 
       return newPromotion;
     } catch (error) {

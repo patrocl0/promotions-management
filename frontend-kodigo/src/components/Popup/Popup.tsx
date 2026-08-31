@@ -95,7 +95,7 @@ export const Popup = ({ onCreate }: PopupProps) => {
       <DialogTrigger
         render={<Button variant="outline">Nueva Promoción</Button>}
       />
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Nueva Promoción</DialogTitle>
@@ -103,7 +103,7 @@ export const Popup = ({ onCreate }: PopupProps) => {
               Configura un descuento para tu catalogo
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup className="grid grid-cols-2 gap-4">
+          <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field>
               <Label htmlFor="nombre">Nombre *</Label>
               <Input
@@ -302,7 +302,9 @@ export const Popup = ({ onCreate }: PopupProps) => {
                 </Button>
               }
             />
-            <Button type="submit">Crear Promoción</Button>
+            <Button type="submit" className="mt-4 sm:mt-0">
+              Crear Promoción
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
