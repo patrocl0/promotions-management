@@ -20,12 +20,6 @@ Elegí shadcn/ui porque proporciona componentes accesibles y reutilizables que p
 
 Utilicé React Hook Form para manejar el estado y validación de los formularios, evitando manejar manualmente cada campo con `useState`.
 
-### Validación — Zod
-
-Utilicé Zod para definir esquemas de validación y mantener las reglas de los datos centralizadas.
-
-La validación se realiza tanto en el frontend como en el backend. En el frontend permite proporcionar feedback inmediato al usuario, mientras que en el backend garantiza que la API no acepte datos inválidos aunque sea consumida directamente.
-
 ### Backend — Node.js + Express
 
 Elegí Node.js con Express para construir la API REST debido a su simplicidad, flexibilidad y facilidad para separar las rutas, controladores y modelos.
