@@ -1,36 +1,54 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Product } from "@/interface/Product";
 import { getProducts } from "@/services/product";
+
+const getProductErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : "No se pudieron cargar los productos.";
 
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProducts = async () => {
+  const refetch = useCallback(async () => {
+    setProductsLoading(true);
+    setError(null);
+
     try {
-      setProductsLoading(true);
-      setError(null);
-
-      const data = await getProducts();
-
-      setProducts(data);
-    } catch (error) {
-      console.error(error);
-      setError("No se pudieron cargar los productos");
+      setProducts(await getProducts());
+    } catch (requestError) {
+      setError(getProductErrorMessage(requestError));
     } finally {
       setProductsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchProducts();
+    let cancelled = false;
+
+    getProducts()
+      .then((data) => {
+        if (!cancelled) {
+          setProducts(data);
+          setError(null);
+        }
+      })
+      .catch((requestError: unknown) => {
+        if (!cancelled) setError(getProductErrorMessage(requestError));
+      })
+      .finally(() => {
+        if (!cancelled) setProductsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return {
     products,
     productsLoading,
     error,
-    refetch: fetchProducts,
+    refetch,
   };
 };

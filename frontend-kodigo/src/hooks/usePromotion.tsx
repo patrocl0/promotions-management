@@ -14,21 +14,21 @@ import { useCallback, useEffect, useState } from "react";
 
 export const usePromotion = () => {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchPromotions = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
-
       const data = await getPromotions();
 
       setPromotions(data);
+      setError(null);
     } catch (error) {
-      console.error(error);
-
-      setError("No se pudieron cargar las promociones");
+      setError(
+        error instanceof Error
+          ? error.message
+          : "No se pudieron cargar las promociones.",
+      );
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,6 @@ export const usePromotion = () => {
 
   const addPromotion = async (data: CreatePromotion) => {
     try {
-      setLoading(true);
       setError(null);
 
       const newPromotion = await createPromotion(data);
@@ -47,8 +46,6 @@ export const usePromotion = () => {
     } catch (error) {
       setError("No se pudo crear la promoción");
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 

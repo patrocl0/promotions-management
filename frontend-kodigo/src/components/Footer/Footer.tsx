@@ -1,11 +1,13 @@
 export const Footer = () => {
   return (
-    <footer className="w-full px-4 py-6 sm:px-6">
-      <p className="text-center text-sm text-muted-foreground">
-        © 2026 Stiven Mora
-        <span className="mx-2 hidden sm:inline">·</span>
-        <span className="block sm:inline">Powered by Kodigo API</span>
+    <footer className="site-footer">
+      <p>PromoDesk</p>
+      <p className="site-footer__caption">
+        Gestión de promociones hecha más simple
       </p>
+      <span className="site-footer__copyright">
+        © 2026 Stiven Mora · Powered by Kodigo API
+      </span>
     </footer>
   );
 };

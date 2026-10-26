@@ -1,5 +1,11 @@
 import type { Promotion } from "@/interface/Promotion";
-import { BadgePercent, CalendarClock, CircleCheck, List } from "lucide-react";
+import {
+  BadgePercent,
+  CalendarClock,
+  CircleCheck,
+  List,
+  TrendingUp,
+} from "lucide-react";
 
 interface CardInformationProps {
   promotions: Promotion[];
@@ -30,41 +36,49 @@ export const CardInformation = ({ promotions }: CardInformationProps) => {
       title: "Total promociones",
       value: total,
       icon: List,
+      detail: "En tu catálogo",
     },
     {
       title: "Programadas",
       value: scheduled,
       icon: CalendarClock,
+      detail: "Listas para iniciar",
     },
     {
       title: "Activas",
       value: active,
       icon: CircleCheck,
+      detail: "En circulación",
     },
     {
       title: "Vigentes hoy",
       value: validToday,
       icon: BadgePercent,
+      detail: "Según sus fechas",
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 w-full mt-6 ">
+    <div className="stat-grid" aria-label="Resumen de promociones">
       {cards.map((card) => {
         const Icon = card.icon;
 
         return (
           <div
             key={card.title}
-            className="border rounded-md p-4 flex justify-between bg-[#171717]"
+            className="stat-card"
           >
-            <div>
-              <p className="text-sm text-muted-foreground">{card.title}</p>
-
-              <p className="text-3xl font-bold mt-2">{card.value}</p>
+            <div className="stat-card__top">
+              <span className="stat-card__icon">
+                <Icon aria-hidden="true" />
+              </span>
+              <TrendingUp className="stat-card__trend" aria-hidden="true" />
             </div>
-
-            <Icon className="size-6 text-muted-foreground" />
+            <div className="stat-card__content">
+              <p className="stat-card__label">{card.title}</p>
+              <p className="stat-card__value">{card.value}</p>
+              <p className="stat-card__detail">{card.detail}</p>
+            </div>
           </div>
         );
       })}

@@ -55,54 +55,79 @@ export const createPromotion = async (
       discountValue,
       startDate,
       endDate,
-      status,
-      createdAt,
-      updatedAt,
     } = req.body;
 
-    // Validaciones básicas
-    if (!name || !targetType || !discountType || discountValue == null) {
+    if (typeof name !== "string" || !name.trim()) {
       res.status(400).json({
-        message:
-          "Nombre, tipo de aplicación, tipo de descuento y valor son obligatorios",
+        message: "El nombre de la promoción es obligatorio.",
       });
       return;
     }
-    if (!startDate || !endDate) {
-      res
-        .status(400)
-        .json({ message: "Las fechas de inicio y fin son obligatorias" });
-      return;
-    } // Si aplica a producto, necesitamos product
-    if (targetType === "product" && !product) {
-      res.status(400).json({ message: "Debe seleccionar un producto" });
+
+    if (targetType !== "product" && targetType !== "category") {
+      res.status(400).json({ message: "El tipo de aplicación no es válido." });
       return;
     }
-    // Si aplica a categoría, necesitamos category
-    if (targetType === "category" && !category) {
-      res.status(400).json({ message: "Debe seleccionar una categoría" });
+
+    if (discountType !== "percentage" && discountType !== "fixed") {
+      res.status(400).json({ message: "El tipo de descuento no es válido." });
       return;
     }
-    // Validar fechas
-    if (new Date(startDate) > new Date(endDate)) {
+
+    if (
+      typeof discountValue !== "number" ||
+      !Number.isFinite(discountValue) ||
+      discountValue <= 0
+    ) {
       res.status(400).json({
-        message: "La fecha de inicio no puede ser posterior a la fecha final",
+        message: "El valor del descuento debe ser un número mayor que cero.",
       });
       return;
     }
-    // Validar porcentaje
+
     if (discountType === "percentage" && discountValue > 100) {
       res
         .status(400)
-        .json({ message: "El porcentaje no puede ser mayor a 100" });
+        .json({ message: "El porcentaje no puede ser mayor a 100." });
       return;
     }
 
+    if (targetType === "product" && !product) {
+      res.status(400).json({ message: "Debe seleccionar un producto." });
+      return;
+    }
+
+    if (
+      targetType === "category" &&
+      (typeof category !== "string" || !category.trim())
+    ) {
+      res.status(400).json({ message: "Debe seleccionar una categoría." });
+      return;
+    }
+
+    const parsedStartDate = new Date(startDate);
+    const parsedEndDate = new Date(endDate);
+    if (
+      !startDate ||
+      !endDate ||
+      Number.isNaN(parsedStartDate.getTime()) ||
+      Number.isNaN(parsedEndDate.getTime())
+    ) {
+      res.status(400).json({ message: "Las fechas de inicio y fin no son válidas." });
+      return;
+    }
+
+    if (parsedStartDate > parsedEndDate) {
+      res.status(400).json({
+        message: "La fecha de inicio no puede ser posterior a la fecha final.",
+      });
+      return;
+    }
     const promotion = await Promotion.create({
-      name,
+      name: name.trim(),
       targetType,
       product: targetType === "product" ? product : null,
-      category: targetType === "category" ? category : null,
+      category: targetType === "category" ? category.trim() : null,
       discountType,
       discountValue,
       startDate,
@@ -123,6 +148,7 @@ export const createPromotion = async (
 export const updatePromotion = async (
   req: Request,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const promotion = await Promotion.findByIdAndUpdate(
@@ -136,8 +162,7 @@ export const updatePromotion = async (
     }
     res.status(200).json(promotion);
   } catch (error) {
-    console.error("Error updating promotion:", error);
-    res.status(500).json({ message: "Error al actualizar la promoción" });
+    next(error);
   }
 };
 

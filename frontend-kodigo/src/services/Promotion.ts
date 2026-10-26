@@ -4,7 +4,9 @@ import type {
   UpdatePromotion,
 } from "@/interface/Promotion";
 
-const API_URL = "http://localhost:3000/api";
+// const API_URL = "http://localhost:3000/api";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const getPromotions = async (): Promise<Promotion[]> => {
   const response = await fetch(`${API_URL}/promotions`);

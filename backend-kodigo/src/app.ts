@@ -8,9 +8,20 @@ import { errorLogger } from "./middlewares/errorLogger";
 import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
+
+const configuredOrigins =
+  process.env.ALLOWED_ORIGINS?.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean) ?? [];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://kodigo-fuente.vercel.app",
+  ...configuredOrigins,
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://kodigo-fuente.vercel.app"],
+    origin: [...new Set(allowedOrigins)],
   }),
 );
 app.use(express.json());

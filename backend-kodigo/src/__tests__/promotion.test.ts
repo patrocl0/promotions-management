@@ -42,7 +42,7 @@ describe("POST /api/promotions", () => {
     expect(response.status).toBe(400);
 
     expect(response.body).toEqual({
-      message: "El porcentaje no puede ser mayor a 100",
+      message: "El porcentaje no puede ser mayor a 100.",
     });
   });
 
@@ -61,8 +61,7 @@ describe("POST /api/promotions", () => {
     expect(response.status).toBe(400);
 
     expect(response.body).toEqual({
-      message:
-        "Nombre, tipo de aplicación, tipo de descuento y valor son obligatorios",
+      message: "El nombre de la promoción es obligatorio.",
     });
   });
 
@@ -80,7 +79,7 @@ describe("POST /api/promotions", () => {
     expect(response.status).toBe(400);
 
     expect(response.body).toEqual({
-      message: "Las fechas de inicio y fin son obligatorias",
+      message: "Las fechas de inicio y fin no son válidas.",
     });
   });
 
@@ -99,7 +98,7 @@ describe("POST /api/promotions", () => {
     expect(response.status).toBe(400);
 
     expect(response.body).toEqual({
-      message: "Debe seleccionar un producto",
+      message: "Debe seleccionar un producto.",
     });
   });
 
@@ -118,7 +117,7 @@ describe("POST /api/promotions", () => {
     expect(response.status).toBe(400);
 
     expect(response.body).toEqual({
-      message: "Debe seleccionar una categoría",
+      message: "Debe seleccionar una categoría.",
     });
   });
 
@@ -138,7 +137,7 @@ describe("POST /api/promotions", () => {
     expect(response.status).toBe(400);
 
     expect(response.body).toEqual({
-      message: "La fecha de inicio no puede ser posterior a la fecha final",
+      message: "La fecha de inicio no puede ser posterior a la fecha final.",
     });
   });
 });
