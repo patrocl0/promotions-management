@@ -6,6 +6,7 @@ COPY package*.json ./
 RUN npm ci
 COPY tsconfig.json ./
 COPY src ./src
+COPY api ./api
 RUN npm run build
 
 FROM node:22-alpine

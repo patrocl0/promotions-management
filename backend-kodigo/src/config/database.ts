@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+let connectionPromise: Promise<typeof mongoose> | null = null;
+
 export const connectDatabase = async (): Promise<void> => {
   const mongoUri = process.env.MONGO_URI;
 
@@ -7,10 +9,22 @@ export const connectDatabase = async (): Promise<void> => {
     throw new Error("MONGO_URI environment variable is required");
   }
 
-  try {
-    await mongoose.connect(mongoUri);
+  if (mongoose.connection.readyState === 1) {
+    return;
+  }
 
-    console.log("MongoDB connected successfully");
+  try {
+    connectionPromise ??= mongoose
+      .connect(mongoUri)
+      .then((connection) => {
+        console.log("MongoDB connected successfully");
+        return connection;
+      })
+      .catch((error: unknown) => {
+        connectionPromise = null;
+        throw error;
+      });
+    await connectionPromise;
   } catch (error) {
     console.error("MongoDB connection error:", error);
     throw error;

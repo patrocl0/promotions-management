@@ -31,7 +31,7 @@ app.use(requestLogger);
 app.use("/api/products", productRouter);
 app.use("/api/promotions", promotionRouter);
 
-app.get("/health", (_req, res) => {
+app.get(["/health", "/api/health"], (_req, res) => {
   res.status(200).json({
     status: "ok",
   });

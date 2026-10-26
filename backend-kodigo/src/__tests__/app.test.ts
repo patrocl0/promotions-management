@@ -11,4 +11,11 @@ describe("GET /health", () => {
       status: "ok",
     });
   });
+
+  it("debería exponer la verificación de salud bajo /api", async () => {
+    const response = await request(app).get("/api/health");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ status: "ok" });
+  });
 });

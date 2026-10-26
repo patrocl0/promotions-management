@@ -59,16 +59,19 @@ cd backend-kodigo
 npm run build
 ```
 
-## Publicar una demo
+## Publicar una demo en Vercel
 
-La demo requiere que el frontend, la API y MongoDB sean accesibles por internet:
+El frontend y el API se despliegan como dos proyectos Vercel desde el mismo repositorio:
 
-1. Crea una base MongoDB administrada y copia su URI de conexión.
-2. Despliega `backend-kodigo` en Render usando el blueprint `render.yaml` de la raíz. Configura `MONGO_URI` y `ALLOWED_ORIGINS` con la URL pública del frontend.
-3. Despliega `frontend-kodigo` en Vercel con esa carpeta como **Root Directory**. Define `VITE_API_URL` como la URL del backend terminada en `/api`.
-4. Añade el dominio de Vercel a `ALLOWED_ORIGINS` en Render y vuelve a desplegar el backend si cambiaste el valor.
-5. Comprueba el endpoint `/health` y prueba crear, buscar, cambiar el estado y eliminar una promoción.
+1. Crea una base MongoDB administrada y prepara su URI de conexión.
+2. Crea o reutiliza un proyecto Vercel para el API, selecciona este repositorio y establece `backend-kodigo` como **Root Directory**. Vercel detecta la función serverless en `api/[...path].ts`.
+3. En el proyecto del API configura `MONGO_URI` como variable privada y `ALLOWED_ORIGINS` con el dominio público del frontend, por ejemplo `https://kodigo-fuente.vercel.app`. Usa Node.js 22.
+4. Despliega el API y verifica `https://<dominio-del-api>/api/health`.
+5. En el proyecto frontend, establece `frontend-kodigo` como **Root Directory** y configura `VITE_API_URL` como `https://<dominio-del-api>/api`. Despliega de nuevo para incorporar el valor.
+6. Prueba crear, buscar, cambiar el estado y eliminar una promoción.
+
+MongoDB Atlas debe aceptar conexiones del API desplegado. Vercel no garantiza IP de salida fija en todos sus planes; configura Network Access de Atlas según las opciones disponibles en tu plan y usa un usuario de base de datos con permisos mínimos.
 
 No guardes credenciales de MongoDB ni variables privadas en el repositorio. `VITE_API_URL` es configuración pública del frontend, no debe contener secretos.
 
-La publicación externa requiere cuentas y credenciales de los proveedores de hosting/base de datos; el repositorio no incluye esos secretos.
+El repositorio conserva `render.yaml` como alternativa para desplegar el API en Render.
